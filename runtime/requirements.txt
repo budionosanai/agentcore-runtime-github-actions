@@ -1,0 +1,8 @@
+bedrock-agentcore-starter-toolkit
+bedrock-agentcore
+langgraph
+google-genai
+pypdf
+boto3
+langchain[google-genai]
+pydantic

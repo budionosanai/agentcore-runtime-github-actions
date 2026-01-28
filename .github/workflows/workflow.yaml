@@ -1,0 +1,72 @@
+name: AI Agent End-to-End Workflow on AgentCore Runtime
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name : Deploy AI Agent to AgentCore Runtime
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWSACCESSKEY }}
+        aws-secret-access-key: ${{ secrets.AWSSECRETKEY }}
+        aws-region: us-west-2
+
+    - name: Install dependencies
+      run: |
+        pip install bedrock-agentcore-starter-toolkit boto3
+
+    - name: Deploy to AgentCore Runtime
+      run: |
+        python deploy-runtime.py
+
+    - name: Get Agent ID
+      id: get-agent-id
+      run: |
+        agent_id=$(cat agent_id.txt)
+        echo "agent_id=$agent_id" >> $GITHUB_OUTPUT
+    
+    outputs:
+      agent_id: ${{ steps.get-agent-id.outputs.agent_id }}
+
+  test:
+    runs-on: ubuntu-latest
+    name : Test Invoke AI Agent
+    needs: deploy
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWSACCESSKEY }}
+        aws-secret-access-key: ${{ secrets.AWSSECRETKEY }}
+        aws-region: us-west-2
+
+    - name: Install dependencies
+      run: |
+        pip install boto3
+
+    - name: Invoke AI Agent using Agent ID
+      env:
+        AGENT_ID: ${{ needs.deploy.outputs.agent_id }}
+      run: |
+        python invoke-agent.py
