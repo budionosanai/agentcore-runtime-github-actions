@@ -1,6 +1,14 @@
 name: AI Agent End-to-End Workflow on AgentCore Runtime
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'runtime/langgraph_agentcore.py'
+      - 'runtime/requirements.txt'
+      - 'deploy-runtime.py'
+      - 'invoke-agent.py'
+    branches:
+      - main
 
 jobs:
   deploy:
