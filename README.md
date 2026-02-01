@@ -46,9 +46,16 @@ This repository explains CI/CD implementation for AI agent candidate screening u
 2. Click Repository secrets then click "New repository secret".
 3. Input secret name and secret key : AWSACCESSKEY and your AWS access key & AWSSECRETKEY and your AWS secret key.
 4. Click "Add secret". Now go to Github Codespaces to create IDE online.
-5. Choose repository, click "Create codespace".
-6. Create all file in Repository Structure then write following code. In `deploy-runtime.py` file, change to your IAM role.
-7. After all code is done, add all code, commit and push all code to repository.
+5. Choose repository that already created then click "Create codespace" and wait several seconds to Codespaces.
+6. Clone the Github repository :
+```
+git clone https://github.com/budionosanai/agentcore-runtime-github-actions.git
+```
+then navigate into the directory :
+```
+cd agentcore-runtime-github-actions
+```
+7. In `deploy-runtime.py` file, replace IAM execution role to your IAM execution role. After all code is done, add all code, commit and push all code to repository.
 8. Go to repository, click Actions, see Action is available and running until done.
 9. Check AWS services such as AgentCore Runtime, Amazon ECR and AgentCore Observability on Amazon CloudWatch for monitoring/observability.
 
